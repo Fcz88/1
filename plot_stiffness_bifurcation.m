@@ -90,8 +90,7 @@ function fig_handle = plot_stiffness_bifurcation(freq_range, global_max, global_
                 'MarkerSize', plot_params.MarkerSize, ...
                 'LineWidth', plot_params.LineWidth, ...
                 'MarkerFaceColor', current_color, ...
-                'MarkerEdgeColor', current_color * 0.7, ...
-                'DisplayName', sprintf('k=%.3f (max)', current_stiffness));
+                'MarkerEdgeColor', current_color * 0.7);
             
             % Plot minimum envelope with line and markers (slightly different style)
             plot(freq_sorted, min_sorted, '--s', ...
@@ -99,12 +98,11 @@ function fig_handle = plot_stiffness_bifurcation(freq_range, global_max, global_
                 'MarkerSize', plot_params.MarkerSize * 0.8, ...
                 'LineWidth', plot_params.LineWidth * 0.9, ...
                 'MarkerFaceColor', 'none', ...
-                'MarkerEdgeColor', current_color, ...
-                'DisplayName', sprintf('k=%.3f (min)', current_stiffness));
+                'MarkerEdgeColor', current_color);
             
             % Add legend entries
-            legend_entries{end+1} = sprintf('k=%.3f (max)', current_stiffness);
-            legend_entries{end+1} = sprintf('k=%.3f (min)', current_stiffness);
+            legend_entries{end+1} = sprintf('k=%.1f (max)', current_stiffness);
+            legend_entries{end+1} = sprintf('k=%.1f (min)', current_stiffness);
         end
     end
     
@@ -117,16 +115,15 @@ function fig_handle = plot_stiffness_bifurcation(freq_range, global_max, global_
     ylabel(plot_params.ylabel, 'FontSize', 12, 'FontWeight', 'bold');
     title(plot_params.title, 'FontSize', 14, 'FontWeight', 'bold');
     
-    % Add legend with improved positioning
-    legend_handle = legend('Location', 'best', 'FontSize', 10);
-    legend_handle.Box = 'on';
-    legend_handle.BackgroundAlpha = 0.9;
+    % Add legend with improved positioning (Octave compatible)
+    if ~isempty(legend_entries)
+        legend_handle = legend(legend_entries, 'Location', 'northeast', 'FontSize', 10);
+        set(legend_handle, 'Box', 'on');
+    end
     
-    % Improve axis appearance
+    % Improve axis appearance (Octave compatible)
     ax = gca;
-    ax.FontSize = 10;
-    ax.LineWidth = 1.0;
-    ax.Box = 'on';
+    set(ax, 'FontSize', 10, 'LineWidth', 1.0, 'Box', 'on');
     
     % Set axis limits with some padding
     if ~isempty(freq_range)
