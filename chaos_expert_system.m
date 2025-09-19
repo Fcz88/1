@@ -474,6 +474,23 @@ function delay = estimate_delay_simple(data)
     end
 end
 
+function noise_level = estimate_noise_level(data)
+% 估计数据的噪声水平
+    if size(data, 2) == 1
+        signal = data;
+    else
+        signal = data(:, 1);  % 使用第一个分量
+    end
+    
+    % 使用高频成分估计噪声
+    if length(signal) > 10
+        diff_signal = diff(signal);
+        noise_level = std(diff_signal) / sqrt(2);  % 差分放大噪声
+    else
+        noise_level = std(signal) * 0.01;  % 默认1%
+    end
+end
+
 function X = reconstruct_phase_space(data, embed_dim, delay)
 % 相空间重构
     N = length(data);
